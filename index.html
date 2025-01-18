@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyframe Animation Preloader</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+            overflow: hidden;
+        }
+
+        .preloader {
+            width: 100vw;
+            height: 100vh;
+            background-size: contain; /* Adjust to contain the entire image */
+            background-position: center;
+            background-repeat: no-repeat; /* Ensure no repetition of the image */
+        }
+    </style>
+</head>
+<body>
+    <div class="preloader" id="preloader"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        const preloader = document.getElementById('preloader');
+        const totalFrames = 245; // Total number of keyframes
+        let currentFrame = 1;
+
+        function updateFrame(frame) {
+            const paddedFrame = String(frame).padStart(4, '0'); // Ensure 4 digits, e.g., "0001"
+            preloader.style.backgroundImage = `url('./keyframes/frame_${paddedFrame}.jpg')`;
+        }
+
+        function startAnimation() {
+            gsap.to({}, {
+                duration: totalFrames / 8, // Slower speed (15 FPS equivalent)
+                repeat: -1,
+                onUpdate: () => {
+                    if (currentFrame >= 173) {
+                        gsap.to({}, { duration: totalFrames / 3 }); // Make it slower from frame 173
+                    }
+                    updateFrame(currentFrame);
+                    currentFrame = currentFrame < totalFrames ? currentFrame + 1 : 1;
+                },
+            });
+        }
+
+        startAnimation();
+    </script>
+</body>
+</html>
